@@ -1,0 +1,32 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>Energy Grid Load</h1>
+<p class="subtitle">Showing latest 200 matching rows.</p>
+
+<div class="toolbar">
+    <form class="search-box" method="get">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search grid status...">
+    </form>
+    <a href="{% url 'gridload_create' %}" class="btn btn-primary">+ Add Reading</a>
+</div>
+
+<table>
+    <tr><th>Load ID</th><th>Facility</th><th>Recorded At</th><th>Total Load (kW)</th><th>Available (kW)</th><th>Status</th><th>Actions</th></tr>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r.load_id }}</td>
+        <td>{{ r.facility.facility_name }}</td>
+        <td>{{ r.recorded_at }}</td>
+        <td>{{ r.total_load_kw }}</td>
+        <td>{{ r.available_capacity_kw }}</td>
+        <td>{{ r.grid_status }}</td>
+        <td class="actions-cell">
+            <a href="{% url 'gridload_update' r.load_id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'gridload_delete' r.load_id %}" class="btn btn-delete">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7" class="empty-state">No grid load readings found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

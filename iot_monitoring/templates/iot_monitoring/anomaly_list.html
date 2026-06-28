@@ -1,0 +1,32 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>Anomaly Events</h1>
+<p class="subtitle">Showing latest 200 matching rows.</p>
+
+<div class="toolbar">
+    <form class="search-box" method="get">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search type or severity...">
+    </form>
+    <a href="{% url 'anomaly_create' %}" class="btn btn-primary">+ Add Anomaly</a>
+</div>
+
+<table>
+    <tr><th>Event ID</th><th>Bay</th><th>Type</th><th>Severity</th><th>Detected At</th><th>Resolved?</th><th>Actions</th></tr>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r.event_id }}</td>
+        <td>{{ r.bay.bay_number }}</td>
+        <td>{{ r.event_type }}</td>
+        <td><span class="badge badge-{{ r.severity|lower }}">{{ r.severity }}</span></td>
+        <td>{{ r.detected_at }}</td>
+        <td>{% if r.resolved_at %}Yes{% else %}No{% endif %}</td>
+        <td class="actions-cell">
+            <a href="{% url 'anomaly_update' r.event_id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'anomaly_delete' r.event_id %}" class="btn btn-delete">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7" class="empty-state">No anomaly events found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

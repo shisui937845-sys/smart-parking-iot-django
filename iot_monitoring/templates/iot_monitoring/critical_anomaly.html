@@ -1,0 +1,33 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>⚠ Critical Anomaly Response (Transaction)</h1>
+<p class="subtitle">
+    Submitting this form runs ONE atomic transaction across 4 tables:
+    anomaly_event (insert) → maintenance_log (insert) → parking_bay (update, taken offline)
+    → bay_occupancy_log (insert). All four succeed together, or none of them happen.
+</p>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-delete">🚨 Trigger Critical Anomaly Response</button>
+    </form>
+</div>
+
+<h1 style="margin-top:40px; font-size:20px;">Recent Critical Responses</h1>
+<table>
+    <tr><th>Event ID</th><th>Bay</th><th>Type</th><th>Detected At</th><th>Bay Now Active?</th></tr>
+    {% for r in recent_responses %}
+    <tr>
+        <td>{{ r.event_id }}</td>
+        <td>{{ r.bay.bay_number }}</td>
+        <td>{{ r.event_type }}</td>
+        <td>{{ r.detected_at }}</td>
+        <td>{% if r.bay.is_active %}Yes{% else %}No (offline){% endif %}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" class="empty-state">No critical anomalies recorded yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

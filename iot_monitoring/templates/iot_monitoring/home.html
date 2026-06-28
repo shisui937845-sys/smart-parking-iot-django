@@ -1,0 +1,14 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>IoT & Real-Time Monitoring Dashboard</h1>
+<p class="subtitle">Live row counts from the smart_parking database (read directly via Django models).</p>
+
+<div class="card-grid">
+    {% for label, count in counts.items %}
+    <div class="stat-card">
+        <div class="num">{{ count }}</div>
+        <div class="label">{{ label }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

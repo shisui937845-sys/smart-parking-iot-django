@@ -1,0 +1,32 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>License Plate Captures</h1>
+<p class="subtitle">ANPR camera captures. Showing latest 200 matching rows.</p>
+
+<div class="toolbar">
+    <form class="search-box" method="get">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search plate number...">
+    </form>
+    <a href="{% url 'capture_create' %}" class="btn btn-primary">+ Add Capture</a>
+</div>
+
+<table>
+    <tr><th>Capture ID</th><th>Bay</th><th>Plate Number</th><th>Confidence</th><th>Type</th><th>Captured At</th><th>Actions</th></tr>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r.capture_id }}</td>
+        <td>{{ r.bay.bay_number }}</td>
+        <td>{{ r.plate_number }}</td>
+        <td>{{ r.confidence_score }}</td>
+        <td>{{ r.capture_type }}</td>
+        <td>{{ r.captured_at }}</td>
+        <td class="actions-cell">
+            <a href="{% url 'capture_update' r.capture_id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'capture_delete' r.capture_id %}" class="btn btn-delete">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7" class="empty-state">No plate captures found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

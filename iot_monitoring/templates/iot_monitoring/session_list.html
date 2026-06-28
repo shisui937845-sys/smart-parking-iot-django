@@ -1,0 +1,32 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>EV Charging Sessions</h1>
+<p class="subtitle">Showing latest 200 matching rows.</p>
+
+<div class="toolbar">
+    <form class="search-box" method="get">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search status...">
+    </form>
+    <a href="{% url 'session_create' %}" class="btn btn-primary">+ Add Session</a>
+</div>
+
+<table>
+    <tr><th>Session ID</th><th>Station</th><th>Start</th><th>End</th><th>Energy (kWh)</th><th>Status</th><th>Actions</th></tr>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r.session_id }}</td>
+        <td>{{ r.station_id }}</td>
+        <td>{{ r.start_time }}</td>
+        <td>{{ r.end_time|default:"—" }}</td>
+        <td>{{ r.energy_delivered_kwh|default:"—" }}</td>
+        <td>{{ r.session_status }}</td>
+        <td class="actions-cell">
+            <a href="{% url 'session_update' r.session_id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'session_delete' r.session_id %}" class="btn btn-delete">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7" class="empty-state">No charging sessions found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

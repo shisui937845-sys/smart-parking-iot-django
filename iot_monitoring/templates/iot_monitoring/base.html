@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Smart Parking — IoT Monitoring{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background: #f4f6f8; color: #1f2d3d;
+        }
+        nav {
+            background: #1f4e5f; color: white; padding: 14px 24px;
+            display: flex; align-items: center; flex-wrap: wrap;
+        }
+        nav a { color: #d7e6ea; text-decoration: none; font-size: 14px; margin-right: 20px; }
+        nav a:hover { color: white; text-decoration: underline; }
+        nav .brand { font-weight: bold; font-size: 17px; color: white; margin-right: 30px; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+        h1 { font-size: 24px; margin-bottom: 4px; }
+        .subtitle { color: #607080; margin-bottom: 20px; font-size: 14px; }
+        table {
+            width: 100%; border-collapse: collapse; background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-radius: 6px; overflow: hidden;
+        }
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e8edf0; font-size: 14px; }
+        th { background: #1f4e5f; color: white; font-weight: 600; }
+        tr:hover { background: #f0f6f8; }
+        .btn {
+            display: inline-block; padding: 7px 14px; border-radius: 5px;
+            text-decoration: none; font-size: 13px; border: none; cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-primary { background: #2e75b6; color: white; }
+        .btn-primary:hover { background: #235a8c; }
+        .btn-edit { background: #e8a33d; color: white; }
+        .btn-edit:hover { background: #c9852a; }
+        .btn-delete { background: #d9534f; color: white; }
+        .btn-delete:hover { background: #b8302c; }
+        .btn-secondary { background: #aab4bd; color: white; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+        .toolbar > * { margin-right: 12px; }
+        .search-box input { padding: 8px 12px; border: 1px solid #cdd5db; border-radius: 5px; width: 240px; font-size: 14px; }
+        .card {
+            background: white; border-radius: 8px; padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); max-width: 600px;
+        }
+        .card-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px; margin-top: 20px;
+        }
+        .stat-card {
+            background: white; border-radius: 8px; padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center;
+            display: inline-block; width: 22%; margin: 0 1.5% 16px 0; vertical-align: top;
+            box-sizing: border-box;
+        }
+        .stat-card .num { font-size: 32px; font-weight: bold; color: #1f4e5f; }
+        .stat-card .label { color: #607080; font-size: 13px; margin-top: 6px; }
+        form p { margin: 14px 0; }
+        form label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #3d4d5c; }
+        .form-control {
+            width: 100%; padding: 8px 10px; border: 1px solid #cdd5db;
+            border-radius: 5px; font-size: 14px; font-family: inherit;
+        }
+        .messages { list-style: none; padding: 0; margin: 0 0 16px 0; }
+        .messages li {
+            padding: 10px 16px; border-radius: 5px; margin-bottom: 8px; font-size: 14px;
+        }
+        .messages .success { background: #dff0e1; color: #2a6e3f; border: 1px solid #b8e0c2; }
+        .messages .error { background: #fbe2e1; color: #a33a36; border: 1px solid #f3bcb9; }
+        .actions-cell { white-space: nowrap; }
+        .actions-cell .btn { margin-right: 4px; }
+        .badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+        .badge-critical { background: #fbe2e1; color: #a33a36; }
+        .badge-high { background: #fde7d4; color: #a35d1f; }
+        .badge-medium { background: #fdf3d4; color: #8a7211; }
+        .badge-low { background: #e3f0e6; color: #2f6b3f; }
+        .empty-state { text-align: center; padding: 40px; color: #8b98a3; }
+    </style>
+</head>
+<body>
+    <nav>
+        <span class="brand">🅿️ Smart Parking — IoT Monitoring</span>
+        <a href="{% url 'home' %}">Dashboard</a>
+        <a href="{% url 'occupancy_list' %}">Occupancy</a>
+        <a href="{% url 'capture_list' %}">Plate Captures</a>
+        <a href="{% url 'session_list' %}">EV Sessions</a>
+        <a href="{% url 'anomaly_list' %}">Anomalies</a>
+        <a href="{% url 'gridload_list' %}">Grid Load</a>
+        <a href="{% url 'maintenance_list' %}">Maintenance</a>
+        <a href="{% url 'handle_critical_anomaly' %}" style="color:#ffd9a0;">⚠ Critical Anomaly</a>
+    </nav>
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

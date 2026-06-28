@@ -1,0 +1,32 @@
+{% extends 'iot_monitoring/base.html' %}
+{% block content %}
+<h1>Maintenance Log</h1>
+<p class="subtitle">Showing latest 200 matching rows.</p>
+
+<div class="toolbar">
+    <form class="search-box" method="get">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search entity type or description...">
+    </form>
+    <a href="{% url 'maintenance_create' %}" class="btn btn-primary">+ Add Ticket</a>
+</div>
+
+<table>
+    <tr><th>ID</th><th>Entity</th><th>Issue</th><th>Reported By</th><th>Reported At</th><th>Resolved?</th><th>Actions</th></tr>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r.maintenance_id }}</td>
+        <td>{{ r.entity_type }} #{{ r.entity_id }}</td>
+        <td>{{ r.issue_description|truncatechars:50 }}</td>
+        <td>{{ r.reported_by|default:"—" }}</td>
+        <td>{{ r.reported_at }}</td>
+        <td>{% if r.resolved_at %}Yes{% else %}No{% endif %}</td>
+        <td class="actions-cell">
+            <a href="{% url 'maintenance_update' r.maintenance_id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'maintenance_delete' r.maintenance_id %}" class="btn btn-delete">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7" class="empty-state">No maintenance tickets found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
